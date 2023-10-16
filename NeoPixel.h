@@ -47,7 +47,6 @@ namespace NeoPixel{
     bool dma_active{false};
     std::vector<uint32_t> dma_buffer;
   };
-
 }
 
 #endif //STM32_NEOPIXEL_NEOPIXEL_H
