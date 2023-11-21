@@ -2,9 +2,6 @@
 // Created by Lars Schwarz on 13.10.2023.
 //
 
-
-// TODO: std::array<LedClass, numLedds> leds
-
 #include <vector>
 #include "NeoPixel.h"
 
@@ -29,15 +26,19 @@ void NeoPixel::Pixel::set_brightness(uint8_t brightness) {
   color.brightness = brightness;
 }
 
-NeoPixel::Pixel::color_t NeoPixel::Pixel::getColor() {
+NeoPixel::Color NeoPixel::Pixel::getColor() {
   return color;
 }
 
-NeoPixel::Group::Group(std::initializer_list<Pixel *> pixels_): pixels(pixels_) {}
+NeoPixel::Group::Group(NeoPixel::Pixel *pixels_, std::initializer_list<uint8_t> indexes_) {
+  for (const auto &item: indexes_) {
+    pixels.push_back(pixels_ + item * sizeof(NeoPixel::Pixel));
+  }
+}
 
-NeoPixel::Group::Group(NeoPixel::Pixel *pixels_, uint8_t number_of_pixels) {
+NeoPixel::Group::Group(Pixel* pixels_, uint8_t number_of_pixels) {
   for (int i = 0; i < number_of_pixels; ++i) {
-    pixels.push_back((pixels_+i));
+    pixels.push_back(pixels_ + i* sizeof(NeoPixel::Pixel));
   }
 }
 
@@ -56,20 +57,15 @@ void NeoPixel::Group::set_brightness(uint8_t brightness) {
     pixel->set_brightness(brightness);
 }
 
-std::vector<NeoPixel::Pixel*> NeoPixel::Group::get_pixels() {
-  return pixels;
+NeoPixel::Controller::Controller(NeoPixel::Controller::timer_t timer_, NeoPixel::Controller::type_e type_,
+                                 uint8_t number_of_pixels) : timer(timer_), type(type_) {
+  for (int i = 0; i < number_of_pixels; ++i) {
+    pixels.push_back(new NeoPixel::Pixel);
+  }
 }
 
-NeoPixel::Controller::Controller(NeoPixel::Controller::timer_t timer_, NeoPixel::Controller::type_e type_,
-                                 std::initializer_list<Group *> groups_)
- : timer(timer_),
- type(type_){
-
-  for (auto &group: groups_) {
-    for (const auto &pixel: group->get_pixels()) {
-      pixels.push_back(pixel);
-    }
-  }
+NeoPixel::Pixel* NeoPixel::Controller::get_pixel(uint8_t position) {
+  return pixels.at(position);
 }
 
 void NeoPixel::Controller::off() {
