@@ -63,8 +63,8 @@ namespace NeoPixel{
 
   class Group {
   public:
-    Group(NeoPixel::Pixel* pixel_, std::initializer_list<uint8_t> indexes_);
-    Group(Pixel* pixels_, uint8_t number_of_pixels);
+    Group(NeoPixel::Controller* controller, uint8_t start, uint8_t end);
+    Group(NeoPixel::Controller* controller, std::initializer_list<uint8_t> indexes);
     void off();
     void set_color(uint8_t red, uint8_t green, uint8_t blue);
     void set_brightness(uint8_t brightness);

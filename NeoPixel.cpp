@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <valarray>
 #include "NeoPixel.h"
 
 NeoPixel::Pixel::Pixel() {
@@ -30,15 +31,15 @@ NeoPixel::Color NeoPixel::Pixel::getColor() {
   return color;
 }
 
-NeoPixel::Group::Group(NeoPixel::Pixel *pixels_, std::initializer_list<uint8_t> indexes_) {
-  for (const auto &item: indexes_) {
-    pixels.push_back(pixels_ + item * sizeof(NeoPixel::Pixel));
+NeoPixel::Group::Group(NeoPixel::Controller* controller, std::initializer_list<uint8_t> indexes) {
+  for (const auto &item: indexes) {
+    pixels.push_back(controller->get_pixel(item));
   }
 }
 
-NeoPixel::Group::Group(Pixel* pixels_, uint8_t number_of_pixels) {
-  for (int i = 0; i < number_of_pixels; ++i) {
-    pixels.push_back(pixels_ + i* sizeof(NeoPixel::Pixel));
+NeoPixel::Group::Group(NeoPixel::Controller* controller, uint8_t start, uint8_t end) {
+  for (int i = start; i < end; ++i) {
+    pixels.push_back(controller->get_pixel(i));
   }
 }
 
