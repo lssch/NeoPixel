@@ -13,7 +13,7 @@ namespace NeoPixel{
   #define LOGIC_ZERO 25
   #define LOGIC_ONE 51
 
-  class __attribute__ ((__packed__)) Color {
+  class Color {
   public:
     uint8_t red;
     uint8_t green;
@@ -23,7 +23,6 @@ namespace NeoPixel{
 
   class Pixel {
   public:
-
     Pixel();
     void off();
     void set_color(uint8_t red, uint8_t green, uint8_t blue);
@@ -31,7 +30,7 @@ namespace NeoPixel{
     void set_brightness(uint8_t brightness);
 
   private:
-    Color color;
+    Color _color;
   };
 
   class Controller {
@@ -41,7 +40,7 @@ namespace NeoPixel{
       SK6812
     } type_e;
 
-    typedef struct _timer_t {
+    typedef struct {
       TIM_HandleTypeDef *htim;
       uint8_t channel;
     } timer_t;
@@ -54,11 +53,11 @@ namespace NeoPixel{
     void update();
     void dma_finished();
   private:
-    timer_t timer;
-    type_e type;
-    std::vector<NeoPixel::Pixel*> pixels;
-    bool dma_active{false};
-    std::vector<uint32_t> dma_buffer;
+    timer_t _timer;
+    type_e _type;
+    std::vector<NeoPixel::Pixel*> _pixels;
+    bool _dma_active;
+    std::vector<uint32_t> _dma_buffer;
   };
 
   class Group {
@@ -70,7 +69,7 @@ namespace NeoPixel{
     void set_brightness(uint8_t brightness);
 
   private:
-    std::vector<Pixel*> pixels;
+    std::vector<Pixel*> _pixels;
   };
 }
 
