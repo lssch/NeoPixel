@@ -58,8 +58,8 @@ void NeoPixel::Group::set_brightness(uint8_t brightness) {
     pixel->set_brightness(brightness);
 }
 
-NeoPixel::Controller::Controller(NeoPixel::Controller::timer_t timer_, NeoPixel::Controller::type_e type_,
-                                 uint8_t number_of_pixels) : _timer(timer_), _type(type_) {
+NeoPixel::Controller::Controller(NeoPixel::Controller::timer_t timer, NeoPixel::Controller::type_e type,
+                                 uint8_t number_of_pixels) : _timer(timer), _type(type) {
   for (int i = 0; i < number_of_pixels; ++i) {
     _pixels.push_back(new NeoPixel::Pixel);
   }
